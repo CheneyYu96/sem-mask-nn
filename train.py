@@ -24,7 +24,7 @@ def fine_tune(model, name):
 
     # TODO data loader
     dsets = {x: SegDataset(os.path.join(DATA_DIR, x)) for x in ['train', 'val']}
-    dset_loaders = {x: DataLoader(dsets[x], batch_size=1, shuffle=True, num_workers=1) for x in ['train', 'val']}
+    dset_loaders = {x: DataLoader(dsets[x], batch_size=batch_size, shuffle=True, num_workers=1) for x in ['train', 'val']}
 
     train_loader, val_loader = dset_loaders['train'], dset_loaders['val']
 
@@ -53,7 +53,7 @@ def train(model, name, criterion, optimizer, scheduler, train_loader, val_loader
                 inputs, labels = Variable(raw_inputs), Variable(raw_labels)
 
             outputs = model(inputs)
-            print('Shape. output:{}; label:{}'.format(outputs.shape, labels.shape))
+            # print('Shape. output:{}; label:{}'.format(outputs.shape, labels.shape))
 
             loss = criterion(outputs, labels)
             loss.backward()
@@ -76,11 +76,11 @@ def val(model, val_loader, epoch):
     pixel_accs = []
     for iter, batch in enumerate(val_loader):
         # print('val : {}'.format(len(batch)))
-        # raw_inputs, raw_labels = batch[0], batch[1]
+        raw_inputs, raw_labels = batch[0], batch[1]
         if use_gpu:
-            inputs = Variable(batch['X'].cuda())
+            inputs = Variable(raw_inputs.cuda())
         else:
-            inputs = Variable(batch['X'])
+            inputs = Variable(raw_inputs)
 
         output = model(inputs)
         output = output.data.cpu().numpy()
@@ -88,7 +88,7 @@ def val(model, val_loader, epoch):
         N, _, h, w = output.shape
         pred = output.transpose(0, 2, 3, 1).reshape(-1, n_class).argmax(axis=1).reshape(N, h, w)
 
-        target = batch['l'].cpu().numpy().reshape(N, h, w)
+        target = batch[1].cpu().numpy().reshape(N, h, w)
         for p, t in zip(pred, target):
             total_ious.append(iou(p, t))
             pixel_accs.append(pixel_acc(p, t))

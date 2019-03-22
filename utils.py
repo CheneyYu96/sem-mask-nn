@@ -22,8 +22,8 @@ from torchvision.transforms import transforms
     Default settings
 """
 use_gpu    = 0
-n_class    = 20
-batch_size = 8
+n_class    = 1
+batch_size = 1
 epochs     = 25
 lr         = 1e-4
 momentum   = 0
