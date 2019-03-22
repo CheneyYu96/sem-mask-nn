@@ -45,7 +45,7 @@ def train(model, name, criterion, optimizer, scheduler, train_loader, val_loader
             
             raw_inputs, raw_labels = batch[0], batch[1]
             # inputs, labels = None, None
-            if use_gpu:
+            if vals['use_gpu']:
                 inputs = Variable(raw_inputs.cuda())
                 labels = Variable(raw_labels.cuda())
             else:
@@ -76,7 +76,7 @@ def val(model, val_loader, epoch):
     for iter, batch in enumerate(val_loader):
         # print('val : {}'.format(len(batch)))
         raw_inputs, raw_labels = batch[0], batch[1]
-        if use_gpu:
+        if vals['use_gpu']:
             inputs = Variable(raw_inputs.cuda())
         else:
             inputs = Variable(raw_inputs)
