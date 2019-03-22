@@ -26,8 +26,8 @@ logging.basicConfig(
 def main(cmd, net, gpu):
     if gpu >= 0 and torch.cuda.is_available():
         use_gpu = 1
-        logging.info('Use GPU. device: {}'.format(params['gpu']))
-        torch.cuda.set_device(params['gpu'])
+        logging.info('Use GPU. device: {}'.format(gpu))
+        torch.cuda.set_device(gpu)
 
     model = models.all_models[net](n_class)
     if cmd:
