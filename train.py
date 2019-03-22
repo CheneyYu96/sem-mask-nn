@@ -36,7 +36,7 @@ def fine_tune(model, name):
 def train(model, name, criterion, optimizer, scheduler, train_loader, val_loader, epochs):
     if vals['use_gpu']:
         model = model.cuda()
-        
+
     for epoch in range(epochs):
         scheduler.step()
 
@@ -69,7 +69,7 @@ def train(model, name, criterion, optimizer, scheduler, train_loader, val_loader
             .format(epoch, gap_time(since), np.mean(epoch_losses)))
         torch.save(model, get_model_path(name, epoch))
 
-        val(model, epoch)
+        val(model, val_loader, epoch)
 
 def val(model, val_loader, epoch):
     model.eval()
