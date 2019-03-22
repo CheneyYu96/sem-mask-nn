@@ -4,6 +4,7 @@ import torch.optim as optim
 from torch.optim import lr_scheduler
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
+from torchvision import datasets
 import numpy as np
 from tqdm import tqdm
 import logging
@@ -13,6 +14,7 @@ logging.basicConfig(
 )
 
 from utils import *
+from dataset import SegDataset
 
 def fine_tune(model, name):
     logging.info("Fine tuning model: {}".format(name))
@@ -21,7 +23,10 @@ def fine_tune(model, name):
     scheduler = lr_scheduler.StepLR(optimizer, step_size=step_size, gamma=gamma)  # decay LR by a factor of 0.5 every 30 epochs
 
     # TODO data loader
-    train_loader, val_loader = None, None
+    dsets = {x: SegDataset(os.path.join(DATA_DIR, x)) for x in ['train', 'val']}
+    dset_loaders = {x: DataLoader(dsets[x], batch_size=1, shuffle=True, num_workers=1) for x in ['train', 'val']}
+
+    train_loader, val_loader = dset_loaders['train'], dset_loaders['val']
 
     train(model, name, criterion, optimizer, scheduler, train_loader, val_loader, epochs)
 
@@ -39,14 +44,17 @@ def train(model, name, criterion, optimizer, scheduler, train_loader, val_loader
         for iter, batch in enumerate(train_loader):
             optimizer.zero_grad()
             
+            raw_inputs, raw_labels = batch[0], batch[1]
             # inputs, labels = None, None
             if use_gpu:
-                inputs = Variable(batch['X'].cuda())
-                labels = Variable(batch['Y'].cuda())
+                inputs = Variable(raw_inputs.cuda())
+                labels = Variable(raw_labels.cuda())
             else:
-                inputs, labels = Variable(batch['X']), Variable(batch['Y'])
+                inputs, labels = Variable(raw_inputs), Variable(raw_labels)
 
             outputs = model(inputs)
+            print('Shape. output:{}; label:{}'.format(outputs.shape, labels.shape))
+
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
@@ -67,6 +75,8 @@ def val(model, val_loader, epoch):
     total_ious = []
     pixel_accs = []
     for iter, batch in enumerate(val_loader):
+        # print('val : {}'.format(len(batch)))
+        # raw_inputs, raw_labels = batch[0], batch[1]
         if use_gpu:
             inputs = Variable(batch['X'].cuda())
         else:

@@ -34,6 +34,7 @@ gamma      = 0.5
 # dir path
 ROOT_DIR = dirname(abspath(__file__))
 MODEL_DIR = '{}/saved_model'.format(ROOT_DIR)
+DATA_DIR = '{}/data'.format(ROOT_DIR)
 
 now = lambda: time.time()
 gap_time = lambda past_time : int((now() - past_time) * 1000)
