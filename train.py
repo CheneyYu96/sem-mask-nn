@@ -59,10 +59,10 @@ def train(model, name, criterion, optimizer, scheduler, train_loader, val_loader
             loss.backward()
             optimizer.step()
 
-            epoch_losses.append(loss.data[0])
+            epoch_losses.append(loss.item())
             if iter % 10 == 0:
                 logging.info("epoch: {}, iter: {}, loss: {:0.5f}, avg: {:0.5f}"
-                    .format(epoch, iter, loss.data[0], np.mean(epoch_losses)))
+                    .format(epoch, iter, loss.item(), np.mean(epoch_losses)))
         
         logging.info("Finish epoch: {}, time: {}, avg_loss: {:0.5f}"
             .format(epoch, gap_time(since), np.mean(epoch_losses)))
