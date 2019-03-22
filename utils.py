@@ -21,7 +21,6 @@ from torchvision.transforms import transforms
 """
     Default settings
 """
-use_gpu    = 0
 n_class    = 1
 batch_size = 1
 epochs     = 25
@@ -30,6 +29,13 @@ momentum   = 0
 w_decay    = 1e-5
 step_size  = 5
 gamma      = 0.5
+
+"""
+    global vars
+"""
+vals = {
+    'use_gpu': 0
+}
 
 # dir path
 ROOT_DIR = dirname(abspath(__file__))

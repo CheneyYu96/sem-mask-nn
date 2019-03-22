@@ -25,7 +25,7 @@ logging.basicConfig(
 @click.option('--gpu', type=int, default=-1, help='ID of GPU device; -1 if not use GPU')
 def main(cmd, net, gpu):
     if gpu >= 0 and torch.cuda.is_available():
-        use_gpu = 1
+        vals['use_gpu'] = 1
         logging.info('Use GPU. device: {}'.format(gpu))
         torch.cuda.set_device(gpu)
 

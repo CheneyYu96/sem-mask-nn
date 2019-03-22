@@ -27,7 +27,6 @@ def fine_tune(model, name):
     dset_loaders = {x: DataLoader(dsets[x], batch_size=batch_size, shuffle=True, num_workers=1) for x in ['train', 'val']}
 
     train_loader, val_loader = dset_loaders['train'], dset_loaders['val']
-
     train(model, name, criterion, optimizer, scheduler, train_loader, val_loader, epochs)
 
 '''
