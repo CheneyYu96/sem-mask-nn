@@ -21,7 +21,7 @@ from torchvision.transforms import transforms
 """
     Default settings
 """
-n_class    = 1
+n_class    = 7
 batch_size = 1
 epochs     = 25
 lr         = 1e-4
@@ -29,6 +29,9 @@ momentum   = 0
 w_decay    = 1e-5
 step_size  = 5
 gamma      = 0.5
+
+# TODO calculate mean of BGR
+means = np.array([104.00698793, 116.66876762, 122.67891434])
 
 """
     global vars

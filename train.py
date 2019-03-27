@@ -7,6 +7,10 @@ from torch.utils.data import DataLoader
 from torchvision import datasets
 import numpy as np
 from tqdm import tqdm
+
+from distutils.version import LooseVersion
+import torch.nn.functional as F
+
 import logging
 logging.basicConfig(
     level=logging.INFO,
@@ -16,9 +20,35 @@ logging.basicConfig(
 from utils import *
 from dataset import SegDataset
 
+def cross_entropy2d(input, target, weight=None, size_average=True):
+    '''
+    Reference: https://github.com/wkentaro/pytorch-fcn/blob/master/torchfcn/trainer.py
+    '''
+    # input: (n, c, h, w), target: (n, h, w)
+    n, c, h, w = input.size()
+    # log_p: (n, c, h, w)
+    if LooseVersion(torch.__version__) < LooseVersion('0.3'):
+        # ==0.2.X
+        log_p = F.log_softmax(input)
+    else:
+        # >=0.3
+        log_p = F.log_softmax(input, dim=1)
+    # log_p: (n*h*w, c)
+    log_p = log_p.transpose(1, 2).transpose(2, 3).contiguous()
+    log_p = log_p[target.view(n, h, w, 1).repeat(1, 1, 1, c) >= 0]
+    log_p = log_p.view(-1, c)
+    # target: (n*h*w,)
+    mask = target >= 0
+    target = target[mask]
+    loss = F.nll_loss(log_p, target, weight=weight, reduction='sum')
+    if size_average:
+        loss /= mask.data.sum().float()
+    return loss
+
 def fine_tune(model, name):
     logging.info("Fine tuning model: {}".format(name))
-    criterion = nn.BCEWithLogitsLoss()
+    # criterion = nn.CrossEntropyLoss()
+    criterion = cross_entropy2d
     optimizer = optim.RMSprop(model.parameters(), lr=lr, momentum=momentum, weight_decay=w_decay)
     scheduler = lr_scheduler.StepLR(optimizer, step_size=step_size, gamma=gamma)  # decay LR by a factor of 0.5 every 30 epochs
 
@@ -46,6 +76,7 @@ def train(model, name, criterion, optimizer, scheduler, train_loader, val_loader
             optimizer.zero_grad()
             
             raw_inputs, raw_labels = batch[0], batch[1]
+
             # inputs, labels = None, None
             if vals['use_gpu']:
                 inputs = Variable(raw_inputs.cuda())
@@ -54,8 +85,9 @@ def train(model, name, criterion, optimizer, scheduler, train_loader, val_loader
                 inputs, labels = Variable(raw_inputs), Variable(raw_labels)
 
             outputs = model(inputs)
-            # print('Shape. output:{}; label:{}'.format(outputs.shape, labels.shape))
+            # print('Shape. input:{}; output:{}; label:{}'.format(inputs.shape, outputs.shape, labels.shape))
 
+            # loss = criterion(outputs.squeeze(0), labels.squeeze(0))
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
@@ -124,4 +156,4 @@ def iou(pred, target):
 def pixel_acc(pred, target):
     correct = (pred == target).sum()
     total   = (target == target).sum()
-    return correct / total
+    return correct / total  
