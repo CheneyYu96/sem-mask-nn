@@ -22,10 +22,10 @@ from torchvision.transforms import transforms
     Default settings
 """
 n_class    = 7
-batch_size = 1
+batch_size = 10
 epochs     = 25
 lr         = 1e-4
-momentum   = 0
+momentum   = 0.9
 w_decay    = 1e-5
 step_size  = 5
 gamma      = 0.5
