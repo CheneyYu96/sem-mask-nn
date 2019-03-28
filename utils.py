@@ -22,8 +22,6 @@ from torchvision.transforms import transforms
     Default settings
 """
 n_class    = 7
-batch_size = 10
-epochs     = 25
 lr         = 1e-4
 momentum   = 0.9
 w_decay    = 1e-5
@@ -37,7 +35,9 @@ means = np.array([104.00698793, 116.66876762, 122.67891434])
     global vars
 """
 vals = {
-    'use_gpu': 0
+    'use_gpu': -1,
+    'batch_size': 1,
+    'epochs': 25
 }
 
 # dir path

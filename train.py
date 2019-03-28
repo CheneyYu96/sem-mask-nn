@@ -52,7 +52,8 @@ def fine_tune(model, name):
     optimizer = optim.RMSprop(model.parameters(), lr=lr, momentum=momentum, weight_decay=w_decay)
     scheduler = lr_scheduler.StepLR(optimizer, step_size=step_size, gamma=gamma)  # decay LR by a factor of 0.5 every 30 epochs
 
-    # TODO data loader
+    batch_size = vals['batch_size']
+    epochs = vals['epochs']
     dsets = {x: SegDataset(os.path.join(DATA_DIR, x)) for x in ['train', 'val']}
     dset_loaders = {x: DataLoader(dsets[x], batch_size=batch_size, shuffle=True, num_workers=1) for x in ['train', 'val']}
 
