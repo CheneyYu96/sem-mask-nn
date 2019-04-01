@@ -23,9 +23,9 @@ from torchvision.transforms import transforms
 """
 n_class    = 7
 lr         = 1e-4
-momentum   = 0.9
+momentum   = 0
 w_decay    = 1e-5
-step_size  = 5
+step_size  = 10
 gamma      = 0.5
 
 # TODO calculate mean of BGR
@@ -35,9 +35,9 @@ means = np.array([104.00698793, 116.66876762, 122.67891434])
     global vars
 """
 vals = {
-    'use_gpu': -1,
+    'use_gpu': 0,
     'batch_size': 1,
-    'epochs': 25
+    'epochs': 30
 }
 
 # dir path

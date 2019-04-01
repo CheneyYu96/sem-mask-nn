@@ -50,7 +50,7 @@ def fine_tune(model, name):
     # criterion = nn.CrossEntropyLoss()
     criterion = cross_entropy2d
     optimizer = optim.RMSprop(model.parameters(), lr=lr, momentum=momentum, weight_decay=w_decay)
-    scheduler = lr_scheduler.StepLR(optimizer, step_size=step_size, gamma=gamma)  # decay LR by a factor of 0.5 every 30 epochs
+    scheduler = lr_scheduler.StepLR(optimizer, step_size=step_size, gamma=gamma)  # decay LR by a factor of 0.5 every {step_size} epochs
 
     batch_size = vals['batch_size']
     epochs = vals['epochs']
@@ -86,7 +86,6 @@ def train(model, name, criterion, optimizer, scheduler, train_loader, val_loader
             outputs = model(inputs)
             # print('Shape. input:{}; output:{}; label:{}'.format(inputs.shape, outputs.shape, labels.shape))
 
-            # loss = criterion(outputs.squeeze(0), labels.squeeze(0))
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
@@ -107,7 +106,7 @@ def val(model, val_loader, epoch):
     total_ious = []
     pixel_accs = []
     for iter, batch in enumerate(val_loader):
-        # print('val : {}'.format(len(batch)))
+
         raw_inputs, raw_labels = batch[0], batch[1]
         if vals['use_gpu']:
             inputs = Variable(raw_inputs.cuda())
