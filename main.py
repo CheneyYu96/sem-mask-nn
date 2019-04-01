@@ -33,11 +33,12 @@ def main(cmd, net, gpu, batch, epoches):
 
     if gpu != '-1' and torch.cuda.is_available():
         vals['use_gpu'] = 1
-        logging.info('Use GPU. device: {}'.format(gpu))
 
         gpu_ids = [ int(i) for i in gpu.split(',')]
+        logging.info('Use GPU. device: {}'.format(gpu_ids))
+
         model = nn.DataParallel(model,device_ids=gpu_ids)
-        model = model.cuda()
+        model = model.cuda(gpu_ids[0])
         # torch.cuda.set_device(gpu)
 
     if cmd:
