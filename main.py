@@ -36,7 +36,8 @@ def main(cmd, net, gpu, batch, epoches):
         logging.info('Use GPU. device: {}'.format(gpu))
 
         gpu_ids = [ int(i) for i in gpu.split(',')]
-        model=nn.DataParallel(model,device_ids=gpu_ids)
+        model = nn.DataParallel(model,device_ids=gpu_ids)
+        model = model.cuda()
         # torch.cuda.set_device(gpu)
 
     if cmd:
