@@ -49,13 +49,16 @@ def fine_tune(model, name):
     logging.info("Fine tuning model: {}".format(name))
     # criterion = nn.CrossEntropyLoss()
     criterion = cross_entropy2d
-    optimizer = optim.RMSprop(model.parameters(), lr=lr, momentum=momentum, weight_decay=w_decay)
-    scheduler = lr_scheduler.StepLR(optimizer, step_size=step_size, gamma=gamma)  # decay LR by a factor of 0.5 every {step_size} epochs
+    optimizer = optim.RMSprop(model.parameters(), lr=vals['lr'], momentum=vals['momentum'], weight_decay=vals['w_decay'])
+    scheduler = lr_scheduler.StepLR(optimizer, step_size=vals['step_size'], gamma=vals['gamma'])  # decay LR by a factor of 0.5 every {step_size} epochs
 
     batch_size = vals['batch_size']
     epochs = vals['epochs']
     dsets = {x: SegDataset(os.path.join(DATA_DIR, x)) for x in ['train', 'val']}
     dset_loaders = {x: DataLoader(dsets[x], batch_size=batch_size, shuffle=True, num_workers=1) for x in ['train', 'val']}
+
+    logging.info('Parameters. batch_size: {}, epoches: {}, lr: {}, momentum: {}, w_decay: {}, step_size: {}, gamma: {}.'
+        .format(batch_size, epochs, vals['lr'], vals['momentum'], vals['w_decay'], vals['step_size'], vals['gamma']))
 
     train_loader, val_loader = dset_loaders['train'], dset_loaders['val']
     train(model, name, criterion, optimizer, scheduler, train_loader, val_loader, epochs)

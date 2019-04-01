@@ -25,9 +25,19 @@ logging.basicConfig(
 @click.option('--gpu', type=str, default='-1', help='ID of GPU device; -1 if not use GPU')
 @click.option('--batch', type=int, default=1)
 @click.option('--epoches', type=int, default=25)
-def main(cmd, net, gpu, batch, epoches):
+@click.option('--lr', type=float, default=1e-4)
+@click.option('--momentum', type=float, default=0)
+@click.option('--w-decay', type=float, default=1e-5)
+@click.option('--step-size', type=int, default=10)
+@click.option('--gamma', type=float, default=0.5)
+def main(cmd, net, gpu, batch, epoches, lr, momentum, w_decay, step_size, gamma):
     vals['batch_size'] = batch
     vals['epoches'] = epoches
+    vals['lr'] = lr
+    vals['momentum'] = momentum
+    vals['w_decay'] = w_decay
+    vals['step_size'] = step_size
+    vals['gamma'] = gamma
 
     model = models.all_models[net](n_class)
 
