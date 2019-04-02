@@ -24,15 +24,15 @@ logging.basicConfig(
 @click.option('--net', type=str, default='fcn32', help='Assigned network')
 @click.option('--gpu', type=str, default='-1', help='ID of GPU device; -1 if not use GPU')
 @click.option('--batch', type=int, default=1)
-@click.option('--epoches', type=int, default=25)
+@click.option('--epochs', type=int, default=25)
 @click.option('--lr', type=float, default=1e-4)
 @click.option('--momentum', type=float, default=0)
 @click.option('--w-decay', type=float, default=1e-5)
 @click.option('--step-size', type=int, default=10)
 @click.option('--gamma', type=float, default=0.5)
-def main(cmd, net, gpu, batch, epoches, lr, momentum, w_decay, step_size, gamma):
+def main(cmd, net, gpu, batch, epochs, lr, momentum, w_decay, step_size, gamma):
     vals['batch_size'] = batch
-    vals['epoches'] = epoches
+    vals['epochs'] = epochs
     vals['lr'] = lr
     vals['momentum'] = momentum
     vals['w_decay'] = w_decay
