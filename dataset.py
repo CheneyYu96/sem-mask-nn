@@ -84,4 +84,6 @@ def get_test_img(dir, name):
     # img -= self.mean_bgr
     img = img.transpose(2, 0, 1)
     img = torch.from_numpy(img).float()
+
+    print('last size: {}'.format(img.shape))
     return img
