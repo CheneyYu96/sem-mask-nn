@@ -81,8 +81,9 @@ def infer(model):
         pred = output.transpose(0, 2, 3, 1).reshape(-1, n_class).argmax(axis=1).reshape(N, h, w)
         pred = pred.transpose(1, 2, 0)
         print(pred.shape)
-        imsave(get_pred_name(name), pred)
-        # torchvision.utils.save_image(pred, get_pred_name(name))
+        # imsave(get_pred_name(name), pred)
+        pred = torch.from_numpy(pred).long()
+        torchvision.utils.save_image(pred, get_pred_name(name))
             
 if __name__ == '__main__':
     main()

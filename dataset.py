@@ -76,7 +76,7 @@ def get_test_img(dir, name):
     h, w, _ = img.shape
     pad_h = max(0, HGHT - h)
     pad_w = max(0, WDGT - w)
-    print('old size: {}'.format(img.shape))
+    print('old size: {}; pad_h: {}; pad_w: {}'.format(img.shape, pad_h, pad_w))
     np.pad(img, ((0, pad_w), (0, pad_h), (0, 0)), mode='constant')
     # print('new size: {}'.format(img.shape))
     img = img[:, :, ::-1]  # RGB -> BGR
