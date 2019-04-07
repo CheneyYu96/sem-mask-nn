@@ -64,3 +64,21 @@ class SegDataset(Dataset):
         img = torch.from_numpy(img).float()
         lbl = torch.from_numpy(lbl).long()
         return img, lbl
+
+HGHT = 800
+WDGT = 1200
+
+def get_test_img(dir, name):
+    path = os.path.join(dir, name)
+    img = Image.open(path)
+    h, w, _ = img.shape
+    pad_h = max(0, HGHT - h)
+    pad_w = max(0, WDGT - w)
+
+    np.pad(img, ((0, pad_w), (0, pad_h), (0, 0)), mode='constant')
+    img = img[:, :, ::-1]  # RGB -> BGR
+    img = img.astype(np.float64)
+    # img -= self.mean_bgr
+    img = img.transpose(2, 0, 1)
+    img = torch.from_numpy(img).float()
+    return img

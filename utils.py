@@ -53,6 +53,9 @@ def get_model_path(name, epoch):
     mkdir('{}/{}'.format(MODEL_DIR, name))
     return '{}/{}/{}'.format(MODEL_DIR, name, epoch)
 
+def get_pred_name(name):
+    return '{}/{}'.format(PRED_DIR, name)
+
 def mkdir(newdir):
     if type(newdir) is not str:
         newdir = str(newdir)
