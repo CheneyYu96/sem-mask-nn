@@ -83,7 +83,9 @@ def infer(model):
         print(pred.shape)
         # imsave(get_pred_name(name), pred)
         pred = torch.from_numpy(pred).long()
-        torchvision.utils.save_image(pred, get_pred_name(name))
+        # torchvision.utils.save_image(pred, get_pred_name(name))
+        pred = torchvision.ToPILImage()(pred)
+        pred.save(get_pred_name(name))
             
 if __name__ == '__main__':
     main()
