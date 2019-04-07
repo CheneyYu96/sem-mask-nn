@@ -71,13 +71,14 @@ WDGT = 1200
 def get_test_img(dir, name):
     path = os.path.join(dir, name)
     image = Image.open(path)
-    
+
     img = np.array(image, dtype=np.uint8)
     h, w, _ = img.shape
     pad_h = max(0, HGHT - h)
     pad_w = max(0, WDGT - w)
-
+    print('old size: {}'.format(img.shape))
     np.pad(img, ((0, pad_w), (0, pad_h), (0, 0)), mode='constant')
+    print('new size: {}'.format(img.shape))
     img = img[:, :, ::-1]  # RGB -> BGR
     img = img.astype(np.float64)
     # img -= self.mean_bgr
