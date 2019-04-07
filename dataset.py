@@ -66,7 +66,7 @@ class SegDataset(Dataset):
         return img, lbl
 
 HGHT = 800
-WDGT = 1200
+WDGT = 1216
 
 def get_test_img(dir, name):
     path = os.path.join(dir, name)

@@ -74,8 +74,11 @@ def infer(model):
             image = image.cuda() 
         output = model(image)
         output = output.data.cpu()
-        print(output.shape)
-        torchvision.utils.save_image(output, get_pred_name(name))
+
+        N, _, h, w = output.shape
+        pred = output.transpose(0, 2, 3, 1).reshape(-1, n_class).argmax(axis=1).reshape(N, h, w)
+        print(pred.shape)
+        torchvision.utils.save_image(pred, get_pred_name(name))
             
 if __name__ == '__main__':
     main()
