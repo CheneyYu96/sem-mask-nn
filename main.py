@@ -74,7 +74,7 @@ def infer(model):
             image = image.cuda() 
         output = model(image)
         output = output.data.cpu()
-        print(output)
+        print(output.shape)
         torchvision.utils.save_image(output, get_pred_name(name))
             
 if __name__ == '__main__':
