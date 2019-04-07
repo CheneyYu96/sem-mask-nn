@@ -30,7 +30,8 @@ logging.basicConfig(
 @click.option('--w-decay', type=float, default=1e-5)
 @click.option('--step-size', type=int, default=10)
 @click.option('--gamma', type=float, default=0.5)
-def main(cmd, net, gpu, batch, epochs, lr, momentum, w_decay, step_size, gamma):
+@click.option('--path', type=click.Path(exists=True, resolve_path=True))
+def main(cmd, net, gpu, batch, epochs, lr, momentum, w_decay, step_size, gamma, path):
     vals['batch_size'] = batch
     vals['epochs'] = epochs
     vals['lr'] = lr
@@ -54,7 +55,9 @@ def main(cmd, net, gpu, batch, epochs, lr, momentum, w_decay, step_size, gamma):
     if cmd:
         fine_tune(model, net)
     else:
-        pass
-
+        logging.info('Model path: {}'.format(path))
+        if path != None:
+            load_model = None
+            
 if __name__ == '__main__':
     main()

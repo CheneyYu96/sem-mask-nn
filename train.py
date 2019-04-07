@@ -157,4 +157,4 @@ def iou(pred, target):
 def pixel_acc(pred, target):
     correct = (pred == target).sum()
     total   = (target == target).sum()
-    return correct / total  
+    return (correct + 0.0) / total  
