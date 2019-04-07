@@ -1,5 +1,6 @@
 import torch
 import torchvision
+from skimage.io import imread, imsave
 
 import logging
 import random as rd
@@ -75,10 +76,11 @@ def infer(model):
         output = model(image)
         output = output.data.cpu()
 
-        N, _, h, w = output.shape
+        N, _, h, w = output.shape.numpy()
         pred = output.transpose(0, 2, 3, 1).reshape(-1, n_class).argmax(axis=1).reshape(N, h, w)
         print(pred.shape)
-        torchvision.utils.save_image(pred, get_pred_name(name))
+        imsave(get_pred_name(name), pred)
+        # torchvision.utils.save_image(pred, get_pred_name(name))
             
 if __name__ == '__main__':
     main()
