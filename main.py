@@ -70,7 +70,7 @@ def infer(model):
     img_names = [ f for f in os.listdir(test_dir)]
     for name in img_names:
         print('test image: {}'.format(name))
-        image = get_test_img(test_dir, name)
+        image, old_h, old_w = get_test_img(test_dir, name)
         if vals['use_gpu']:
             image = image.cuda() 
         output = model(image)
@@ -79,7 +79,8 @@ def infer(model):
         N, _, h, w = output.shape
         pred = output.transpose(0, 2, 3, 1).reshape(-1, n_class).argmax(axis=1).reshape(N, h, w)
         pred = pred.transpose(1, 2, 0)
-        # print(pred.shape)
+        pred = pred[:old_h,:old_w,:]
+        print('image size: {}; pred size: {}'.format((old_h, old_w), pred.shape))
 
         cv2.imwrite(get_pred_name(name), pred)
         # pred = torch.from_numpy(pred).long()

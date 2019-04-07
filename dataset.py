@@ -87,4 +87,4 @@ def get_test_img(dir, name):
     img = img.unsqueeze(0)
 
     # print('last size: {}'.format(img.shape))
-    return img
+    return img, h, w
