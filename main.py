@@ -74,9 +74,9 @@ def infer(model):
         if vals['use_gpu']:
             image = image.cuda() 
         output = model(image)
-        output = output.data.cpu()
+        output = output.data.cpu().numpy()
 
-        N, _, h, w = output.shape.numpy()
+        N, _, h, w = output.shape
         pred = output.transpose(0, 2, 3, 1).reshape(-1, n_class).argmax(axis=1).reshape(N, h, w)
         print(pred.shape)
         imsave(get_pred_name(name), pred)
