@@ -68,9 +68,13 @@ def infer(model):
     test_dir = '{}/test/images'.format(DATA_DIR)
     img_names = [ f for f in os.listdir(test_dir)]
     for name in img_names:
+        print('test image: {}'.format(name))
         image = get_test_img(test_dir, name)
-        outputs = model(image)
-        torchvision.utils.save_image(outputs, get_pred_name(name))
+        if vals['use_gpu']:
+            image = image.cuda() 
+        output = model(image)
+        output = output.data.cpu().numpy()
+        torchvision.utils.save_image(output, get_pred_name(name))
             
 if __name__ == '__main__':
     main()

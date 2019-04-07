@@ -70,7 +70,9 @@ WDGT = 1200
 
 def get_test_img(dir, name):
     path = os.path.join(dir, name)
-    img = Image.open(path)
+    image = Image.open(path)
+    
+    img = np.array(image, dtype=np.uint8)
     h, w, _ = img.shape
     pad_h = max(0, HGHT - h)
     pad_w = max(0, WDGT - w)
