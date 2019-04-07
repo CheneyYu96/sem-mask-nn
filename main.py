@@ -73,7 +73,7 @@ def infer(model):
         if vals['use_gpu']:
             image = image.cuda() 
         output = model(image)
-        output = output.data.cpu().numpy()
+        output = output.data.cpu()
         torchvision.utils.save_image(output, get_pred_name(name))
             
 if __name__ == '__main__':
