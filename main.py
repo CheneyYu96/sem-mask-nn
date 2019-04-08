@@ -65,9 +65,9 @@ def main(cmd, net, gpu, batch, epochs, lr, momentum, w_decay, step_size, gamma, 
             if vals['use_gpu']:
                 load_model = nn.DataParallel(load_model,device_ids=gpu_ids)
                 load_model = load_model.cuda()
-            infer(load_model, infer)
+            inference(load_model, infer)
 
-def infer(model, test_name):
+def inference(model, test_name):
     test_dir = '{}/{}/images'.format(DATA_DIR, test_name)
     img_names = [ f for f in os.listdir(test_dir)]
     for name in img_names:
