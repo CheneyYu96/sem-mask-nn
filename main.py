@@ -65,10 +65,10 @@ def main(cmd, net, gpu, batch, epochs, lr, momentum, w_decay, step_size, gamma, 
             if vals['use_gpu']:
                 load_model = nn.DataParallel(load_model,device_ids=gpu_ids)
                 load_model = load_model.cuda()
-            test_dir = '{}/{}/images'.format(DATA_DIR, infer)
-            infer(load_model, test_dir)
+            infer(load_model, infer)
 
-def infer(model, test_dir):
+def infer(model, test_name):
+    test_dir = '{}/{}/images'.format(DATA_DIR, test_name)
     img_names = [ f for f in os.listdir(test_dir)]
     for name in img_names:
         print('test image: {}'.format(name))
@@ -84,7 +84,7 @@ def infer(model, test_dir):
         pred = pred[:old_h,:old_w,:]
         print('image size: {}; pred size: {}'.format((old_h, old_w), pred.shape))
 
-        cv2.imwrite(get_pred_name(name), pred)
+        cv2.imwrite(get_pred_name(test_name, name), pred)
         # pred = torch.from_numpy(pred).long()
         # torchvision.utils.save_image(pred, get_pred_name(name))
             
