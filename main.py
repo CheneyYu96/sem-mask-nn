@@ -34,7 +34,8 @@ logging.basicConfig(
 @click.option('--step-size', type=int, default=10)
 @click.option('--gamma', type=float, default=0.5)
 @click.option('--path', type=click.Path(exists=True, resolve_path=True))
-def main(cmd, net, gpu, batch, epochs, lr, momentum, w_decay, step_size, gamma, path):
+@click.option('--infer', type=str, default='test')
+def main(cmd, net, gpu, batch, epochs, lr, momentum, w_decay, step_size, gamma, path, infer):
     vals['batch_size'] = batch
     vals['epochs'] = epochs
     vals['lr'] = lr
@@ -60,13 +61,14 @@ def main(cmd, net, gpu, batch, epochs, lr, momentum, w_decay, step_size, gamma, 
         logging.info('Model path: {}'.format(path))
         if path != None:
             load_model = torch.load(path)
+            # load_model.load_state_dict(torch.load(path))
             if vals['use_gpu']:
                 load_model = nn.DataParallel(load_model,device_ids=gpu_ids)
                 load_model = load_model.cuda()
-            infer(load_model)
+            test_dir = '{}/{}/images'.format(DATA_DIR, infer)
+            infer(load_model, test_dir)
 
-def infer(model):
-    test_dir = '{}/test/images'.format(DATA_DIR)
+def infer(model, test_dir):
     img_names = [ f for f in os.listdir(test_dir)]
     for name in img_names:
         print('test image: {}'.format(name))
