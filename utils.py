@@ -54,6 +54,7 @@ def get_model_path(name, epoch):
     return '{}/{}/{}'.format(MODEL_DIR, name, epoch)
 
 def get_pred_name(infer, name):
+    mkdir('{}/{}'.format(PRED_DIR, infer))
     return '{}/{}/{}'.format(PRED_DIR, infer, name)
 
 def mkdir(newdir):
